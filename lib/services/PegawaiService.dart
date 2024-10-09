@@ -31,13 +31,27 @@ class Pegawaiservice {
     }
   }
 
-  //untuk delete data 
-  Future<void>deletePegawai(int id) async{
+  //update Data
+  Future<void> updatePegawai(int id, PegawaiModel pegawaiModel) async {
+    final response = await http.put(
+      Uri.parse('$apiUrl/pegawai/update/$id'),
+      headers: {"Content-Type": "appliocation/json"},
+      body: json.encode(pegawaiModel.toJson()),
+    );
+    if (response.statusCode == 200) {
+      print('Data berhasil diupdate');
+    } else {
+      throw Exception('Gagal update data');
+    }
+  }
+
+  //untuk delete data
+  Future<void> deletePegawai(int id) async {
     final response = await http.delete(Uri.parse('$apiUrl/pegawai/delete/$id'));
-    if(response.statusCode == 200 || response.statusCode == 204){
-      //berhasil di hapus 
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      //berhasil di hapus
       print('pegawai dengan id $id berhasil di hapus');
-    } else{
+    } else {
       throw Exception('Gagal menghapus data');
     }
   }

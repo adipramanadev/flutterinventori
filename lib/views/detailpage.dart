@@ -136,7 +136,7 @@ class _DetailPageState extends State<DetailPage> {
                     //tombol edit
                     ElevatedButton(
                       onPressed: () {
-                        Get.to(() => UpdatePage());
+                        Get.to(() => UpdatePage(pegawaiModel: widget.pegawai));
                         // Get.snackbar("Info", "Fungsi Edit nanti disini ");
                       },
                       style: ElevatedButton.styleFrom(
