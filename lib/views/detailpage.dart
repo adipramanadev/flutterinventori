@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterinventori/model/PegawaiModel.dart';
+import 'package:flutterinventori/services/PegawaiService.dart';
+import 'package:flutterinventori/views/updatePage.dart';
 import 'package:get/get.dart';
 
 class DetailPage extends StatefulWidget {
@@ -11,6 +13,51 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  Pegawaiservice _pegawaiservice = Pegawaiservice();
+
+  //function dialog delete
+  void _showDialogDelete() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Konfirmasi Hapus Data'),
+          content: Text('Apakah Anda Yakin Ingin Menghapus Data?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                //nanti kasih function hapus
+                _deletePegawai();
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Hapus',
+                style: TextStyle(color: Colors.red),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  //functionnya delete
+  void _deletePegawai() async {
+    try {
+      await _pegawaiservice.deletePegawai(widget.pegawai.id!);
+      Get.snackbar("Sukses", "Data Berhasil Dihapus");
+      Navigator.pop(context); //kembali ke halaman sebelumnya
+    } catch (e) {
+      Get.snackbar("Error", "Gagal Menghapus Data Pegawai");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +136,8 @@ class _DetailPageState extends State<DetailPage> {
                     //tombol edit
                     ElevatedButton(
                       onPressed: () {
-                        Get.snackbar("Info", "Fungsi Edit nanti disini ");
+                        Get.to(() => UpdatePage());
+                        // Get.snackbar("Info", "Fungsi Edit nanti disini ");
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orangeAccent,
@@ -108,10 +156,13 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     //tombol hapus
-                     //tombol edit
+                    //tombol edit
                     ElevatedButton(
                       onPressed: () {
-                        Get.snackbar("Info", "Fungsi Edit nanti disini ");
+                        //untuk ke halaman Delete
+                        _showDialogDelete();
+
+                        // Get.snackbar("Info", "Fungsi Delete nanti disini ");
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.redAccent,
