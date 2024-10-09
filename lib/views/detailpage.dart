@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutterinventori/model/PegawaiModel.dart';
 import 'package:flutterinventori/services/PegawaiService.dart';
@@ -13,7 +15,25 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  // Pegawaiservice pegawaiservice = Pegawaiservice();
   Pegawaiservice _pegawaiservice = Pegawaiservice();
+  List<PegawaiModel> pegawaiList = [];
+  // Function to load pegawai data
+  _loadPegawai() async {
+    pegawaiList = await _pegawaiservice.getPegawai();
+    setState(() {
+      // filteredList = pegawaiList; // Inisialisasi daftar yang difilter
+    });
+  }
+
+  @override
+  void initState() {
+    _loadPegawai();
+    Timer.periodic(Duration(seconds: 3), (timer) {
+      _loadPegawai();
+    });
+    super.initState();
+  }
 
   //function dialog delete
   void _showDialogDelete() {
