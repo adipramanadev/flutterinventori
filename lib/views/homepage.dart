@@ -28,7 +28,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     _loadPegawai();
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    Timer.periodic(Duration(seconds: 3), (timer) {
       _loadPegawai();
     }); //walaupun sudah bisa menampilkan data secara real time,
     //tapi klo untuk production ga rekomendasi, seharusnya pakai web socket
