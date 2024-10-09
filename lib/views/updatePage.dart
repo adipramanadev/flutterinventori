@@ -101,6 +101,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     //bagian update disini
                     _updatePegawai();
                     // Get.to(Homepage());
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
