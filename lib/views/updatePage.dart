@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterinventori/model/PegawaiModel.dart';
 import 'package:flutterinventori/services/PegawaiService.dart';
+import 'package:flutterinventori/views/detailpage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -101,7 +102,8 @@ class _UpdatePageState extends State<UpdatePage> {
                     //bagian update disini
                     _updatePegawai();
                     // Get.to(Homepage());
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DetailPage(pegawai: )));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
