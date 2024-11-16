@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterinventori/views/homepage.dart';
+import 'package:flutterinventori/views/login.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -15,7 +16,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Aplikasi Inventory',
-      home: Homepage(),
+      initialRoute: '/', // Atur route awal jika perlu
+      routes: {
+        '/': (context) => LoginScreen(), // Route untuk halaman login
+        '/Homepage': (context) => Homepage(), // Route untuk halaman beranda
+      },
+      home: LoginScreen(),
     );
   }
 }
