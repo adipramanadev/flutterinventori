@@ -3,6 +3,7 @@ import 'package:flutterinventori/model/LoginModel.dart';
 import 'package:flutterinventori/services/LoginService.dart';
 import 'package:flutterinventori/views/homepage.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +17,32 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+
+  void initState(){
+    super.initState(); 
+    _checkLoginStatus();
+  }
+
+  //fungsi untuk memeriksa status login
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token != null) {
+      //token ada, pengguna sudah login
+      _navigateToHome();
+    }
+  }
+
+  //fungsi untuk menyimpan token setelah login berhasil
+  Future<void> _saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  //fungsi untuk navigasi ke halaman home
+  void _navigateToHome() {
+    Get.to(() => Homepage());
+  }
 
   //buat function
   Future<void> _handleLogin() async {
@@ -40,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Token : ${loginModel.token}');
       // navigasi ke homescreen
       //home
-      Get.to(Homepage());
+      _navigateToHome();
     } else {
       //jika gagal, tampilkan pesan error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -137,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _emailController.dispose(); 
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
