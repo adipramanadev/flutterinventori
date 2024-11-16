@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterinventori/views/login.dart';
+import 'package:flutterinventori/views/readmaps.dart';
 import 'package:get/get.dart';
 // import 'package:flutterinventori/views/login_screen.dart';
 import 'package:flutterinventori/views/homepage.dart';
@@ -16,8 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Inventori',
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => LoginScreen()),
-        GetPage(name: '/homepage', page: () => Homepage()),
+        // GetPage(name: '/', page: () => LoginScreen()),
+        GetPage(name: '/', page: () => GpsReaderPage()),
       ],
     );
   }

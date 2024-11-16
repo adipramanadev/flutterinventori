@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // Fungsi untuk navigasi ke halaman home
   void _navigateToHome() {
     print('Navigating to homepage');
-    Get.to(() => Homepage());
+    Get.off(() => Homepage());
   }
 
   // handleLogin
