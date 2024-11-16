@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterinventori/model/LoginModel.dart';
 import 'package:flutterinventori/services/LoginService.dart';
 import 'package:flutterinventori/views/homepage.dart';
 import 'package:get/get.dart';
@@ -13,65 +12,76 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //variable deklarasi form
+  // Variable deklarasi form
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  void initState(){
-    super.initState(); 
+  @override
+  void initState() {
+    super.initState();
     _checkLoginStatus();
   }
 
-  //fungsi untuk memeriksa status login
+  // Fungsi untuk memeriksa status login
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    print('Token retrieved: $token'); // Debug log
     if (token != null) {
-      //token ada, pengguna sudah login
+      // Token ada, pengguna sudah login
       _navigateToHome();
+    } else {
+      // Token tidak ada, pengguna belum login
+      print('gagal ke home');
     }
   }
 
-  //fungsi untuk menyimpan token setelah login berhasil
+  // Fungsi untuk menyimpan token setelah login berhasil
   Future<void> _saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
+    print('Token saved: $token'); // Debug log
   }
 
-  //fungsi untuk navigasi ke halaman home
+  // Fungsi untuk navigasi ke halaman home
   void _navigateToHome() {
+    print('Navigating to homepage');
     Get.to(() => Homepage());
   }
 
-  //buat function
+  // handleLogin
   Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Email dan password tidak boleh kosong.')),
+      );
+      return;
+    }
+
     setState(() {
-      _isLoading = true; //tampilkan indikator loading
+      _isLoading = true;
     });
 
-    final loginService = LoginService();
-    final loginModel = await loginService.login(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
-    );
+    final loginService = LoginService(); // Buat instance LoginService
+    final loginModel =
+        await loginService.login(email, password); // Panggil metode login
 
     setState(() {
-      _isLoading = false; //hilangkan indikator loading
+      _isLoading = false;
     });
 
-    //jika login berhasil
     if (loginModel != null) {
-      print('Login Succesful');
-      print('Email : ${loginModel.user?.email}');
-      print('Token : ${loginModel.token}');
-      // navigasi ke homescreen
-      //home
+      print('Login Succesfully');
+      await _saveToken(loginModel.token!);
       _navigateToHome();
     } else {
-      //jika gagal, tampilkan pesan error
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login Failed, Please Try Again')));
+        SnackBar(content: Text('Email atau password salah.')),
+      );
     }
   }
 
@@ -86,16 +96,15 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const SizedBox(height: 100),
+                const Text(
                   'Login',
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
-                  height: 40,
-                ),
+                const SizedBox(height: 40),
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -112,11 +121,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 16.0,
-                ),
+                const SizedBox(height: 16.0),
                 TextField(
                   controller: _passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Password',
                     border: OutlineInputBorder(
@@ -136,24 +144,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 26.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(11.0),
-                        )),
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(11.0),
+                      ),
+                    ),
                     onPressed: _isLoading ? null : _handleLogin,
                     child: _isLoading
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : Text(
+                        : const Text(
                             'Login',
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 16.0,
                             ),
                           ),
                   ),
-                )
+                ),
               ],
             ),
           ),

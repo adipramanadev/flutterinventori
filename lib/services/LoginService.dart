@@ -18,9 +18,11 @@ class LoginService {
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print('Login Response data : $data');
         return LoginModel.fromJson(data);
       } else {
         print('login failed : ${response.statusCode}');
+        print('response body : ${response.body}');
         return null;
       }
     } catch (e) {

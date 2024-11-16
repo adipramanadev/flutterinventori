@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutterinventori/views/homepage.dart';
 import 'package:flutterinventori/views/login.dart';
 import 'package:get/get.dart';
+// import 'package:flutterinventori/views/login_screen.dart';
+import 'package:flutterinventori/views/homepage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Aplikasi Inventory',
-      initialRoute: '/', // Atur route awal jika perlu
-      routes: {
-        '/': (context) => LoginScreen(), // Route untuk halaman login
-        '/Homepage': (context) => Homepage(), // Route untuk halaman beranda
-      },
-      home: LoginScreen(),
+      title: 'Flutter Inventori',
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => LoginScreen()),
+        GetPage(name: '/homepage', page: () => Homepage()),
+      ],
     );
   }
 }
